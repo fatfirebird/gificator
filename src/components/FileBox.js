@@ -2,6 +2,8 @@ import React, { useCallback } from 'react'
 import { Box, Typography } from '@material-ui/core/'
 import styled from 'styled-components'
 import { useDropzone } from 'react-dropzone'
+import { useDispatch } from 'react-redux'
+import { loadFile } from '../redux/actions/actions'
 
 const DashedBox = styled(Box)`
   border-style: dashed;
@@ -16,19 +18,24 @@ const Input = styled.input`
 `
 
 export default () => {
+  const dispatch = useDispatch()
+
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
 
-      reader.onabort = () => console.log('file reading was aborted')
-      reader.onerror = () => console.log('file reading has failed')
+      // reader.onabort = () => console.log('file reading was aborted')
+      // reader.onerror = () => console.log('file reading has failed')
+
       reader.onload = () => {
-        const result = reader.result
-        console.log(result)
+        const type = file.type
+        const url = reader.result
+        dispatch(loadFile(url, type))
+        console.log(type)
       }
       reader.readAsDataURL(file)
     })
-  }, [])
+  }, [dispatch])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop})
 
