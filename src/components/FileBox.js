@@ -29,6 +29,7 @@ export default () => {
 
       if (formats.includes(file.type)) {
         reader.onload = () => {
+          console.log(file)
           const type = file.type
           const url = reader.result
           dispatch(loadFile(url, type))
