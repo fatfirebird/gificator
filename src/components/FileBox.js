@@ -3,7 +3,7 @@ import { Box, Typography } from '@material-ui/core/'
 import styled from 'styled-components'
 import { useDropzone } from 'react-dropzone'
 import { useDispatch } from 'react-redux'
-import { loadFile } from '../redux/actions/actions'
+import { loadFile, sendTypeError, sendUnknownError } from '../redux/actions/actions'
 
 const DashedBox = styled(Box)`
   border-style: dashed;
@@ -23,17 +23,21 @@ export default () => {
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
-
-      // reader.onabort = () => console.log('file reading was aborted')
-      // reader.onerror = () => console.log('file reading has failed')
-
-      reader.onload = () => {
-        const type = file.type
-        const url = reader.result
-        dispatch(loadFile(url, type))
-        console.log(type)
-      }
+      const formats = ['image/gif', 'video/mp4', 'video/webm']
+      
       reader.readAsDataURL(file)
+
+      if (formats.includes(file.type)) {
+        reader.onload = () => {
+          const type = file.type
+          const url = reader.result
+          dispatch(loadFile(url, type))
+        }
+      } else {
+        dispatch(sendTypeError())
+      }
+      
+      reader.onerror = () => dispatch(sendUnknownError())
     })
   }, [dispatch])
 
@@ -46,7 +50,10 @@ export default () => {
       style={isDragActive ? { 'background': '#e4e4e442'} : {}} 
       borderColor="grey.500" p={10} 
     >
-      <Input {...getInputProps()} />
+      <Input 
+        {...getInputProps()} 
+        accept='.gif, .mp4, .webm'
+      />
       <Typography variant='body1' align='center'>
         Бросьте объект сюда
       </Typography>
