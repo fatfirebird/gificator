@@ -2,7 +2,8 @@ import {
   LOAD, 
   TYPE_ERROR, 
   UNKNOWN_ERROR, 
-  HIDE_ALERT
+  HIDE_ALERT,
+  SET_METHOD
 } from './actionTypes';
 
 const hide = dispatch => {
@@ -41,4 +42,9 @@ export const sendUnknownError = () => {
 
 export const hideAlert = () => ({
   type: HIDE_ALERT
+})
+
+export const setMethod = format => ({
+  type: SET_METHOD,
+  payload: format
 })
