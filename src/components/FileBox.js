@@ -25,11 +25,10 @@ export default () => {
       const reader = new FileReader()
       const formats = ['image/gif', 'video/mp4', 'video/webm']
       
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file)   
 
       if (formats.includes(file.type)) {
         reader.onload = () => {
-          console.log(file)
           const type = file.type
           const url = reader.result
           dispatch(loadFile(url, type))
@@ -53,10 +52,10 @@ export default () => {
     >
       <Input 
         {...getInputProps()} 
-        accept='.gif, .mp4, .webm'
+        accept='.mp4, .webm'
       />
       <Typography variant='body1' align='center'>
-        Бросьте объект сюда
+        Бросьте .mp4 или .webm файл сюда
       </Typography>
     </DashedBox>
   )

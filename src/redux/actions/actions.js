@@ -3,7 +3,9 @@ import {
   TYPE_ERROR, 
   UNKNOWN_ERROR, 
   HIDE_ALERT,
-  SET_METHOD
+  ADD_PARAMS,
+  SHOW_LOADER,
+  REMOVE_FILE
 } from './actionTypes';
 
 const hide = dispatch => {
@@ -44,7 +46,23 @@ export const hideAlert = () => ({
   type: HIDE_ALERT
 })
 
-export const setMethod = format => ({
-  type: SET_METHOD,
-  payload: format
+export const showLoader = () => {
+  return dispatch => {
+    dispatch({
+      type: SHOW_LOADER
+    })
+  }
+}
+
+export const addVideoParams = (width, height, duration) => ({
+  type: ADD_PARAMS,
+  payload: {
+    width,
+    height,
+    duration
+  }
+})
+
+export const removeFile = () => ({
+  type: REMOVE_FILE
 })
