@@ -1,11 +1,17 @@
 import { UNKNOWN_ERROR, TYPE_ERROR, HIDE_ALERT } from '../actions/actionTypes'
+import { ActionsTypes } from '../actions/actions'
 
-const initialState = {
+export type initialStateType = {
+  isError: boolean;
+  message: null | string;
+}
+
+const initialState: initialStateType = {
   isError: false,
   message: null
 }
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: ActionsTypes): initialStateType => {
   switch (action.type) {
     case TYPE_ERROR:
       return {

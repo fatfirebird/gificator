@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import gifshot from 'gifshot'
+import React, { useState, ChangeEvent } from 'react';
+// @ts-ignore
+import gifshot from 'gifshot';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Button, CircularProgress, Slider, Typography } from '@material-ui/core';
+import { AppState } from '../redux/reducers/rootReducer';
 import { loadFile, showLoader, removeFile, sendUnknownError } from '../redux/actions/actions';
-import ContentBox from './fileContent.js';
+import ContentBox from './fileContent';
 
 export default () => {
-  const file = useSelector(state => state.file)
-  const { url, width, height, duration, type, isLoading } = file
-  const [frames, setFrames] = useState(1)
-  const dispatch = useDispatch()
+  const file = useSelector((state: AppState) => state.file);
+  const { url, width, height, duration, type, isLoading } = file;
+  const [frames, setFrames] = useState(1);
+  const dispatch = useDispatch();
 
   const convert = () => {
     dispatch(showLoader())
@@ -19,9 +21,7 @@ export default () => {
       'gifHeight': height,
       'gifWidth': width, 
       'numFrames': 10 * frames,
-      'progressCallback': (captureProgress) => { console.log(captureProgress)} 
-
-    }, obj => {
+    }, (obj: any) => {
       if (!obj.error) {
         dispatch(loadFile(obj.image, 'image/gif'))
       } else {
@@ -30,8 +30,8 @@ export default () => {
     })
   }
 
-  const handleSliderChange = (event, newValue) => {
-    setFrames(newValue)
+  const handleSliderChange = (event: ChangeEvent<{}>, newValue: number | number[]): void => {
+    setFrames(newValue as number);
   }
 
   return (
@@ -48,8 +48,8 @@ export default () => {
       <Grid container item xs={8} justify='center'>
         {type !== 'image/gif' &&
         <React.Fragment>
-          <Typography id='input-slider' gutterBottom>
-            Сколько секунд обработать
+          <Typography id='input-slider' gutterBottom align='center'>
+            Дождитесь окончания обработки, либо отмените её 
           </Typography>
           <Slider
             aria-labelledby='input-slider'
@@ -65,8 +65,21 @@ export default () => {
         }
       </Grid>
       <Grid container item justify='space-around'>
-        <Button onClick={convert} variant='contained' color='secondary' disabled={isLoading || type === 'image/gif'}>Конвертировать</Button>
-        <Button onClick={() => dispatch(removeFile())} variant='contained' color='primary'>Удалить</Button>
+        <Button 
+          onClick={convert} 
+          variant='contained' 
+          color='secondary' 
+          disabled={isLoading || type === 'image/gif'}
+        >
+          Конвертировать
+        </Button>
+        <Button 
+          onClick={() => dispatch(removeFile())} 
+          variant='contained' 
+          color='primary'
+        >
+          Удалить
+        </Button>
       </Grid>
     </Grid>
   )

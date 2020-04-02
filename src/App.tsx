@@ -4,11 +4,12 @@ import { Container, Typography } from '@material-ui/core/'
 import { Alert } from '@material-ui/lab';
 import FileBox from './components/FileBox'
 import Conventor from './components/Convertor'
+import { AppState } from './redux/reducers/rootReducer';
 
 export default () => {
-  const error = useSelector(state => state.error)
-  const fileIsLoaded = useSelector(state => state.file.type)
-  const { isError, message } = error
+  const error = useSelector((state: AppState) => state.error);
+  const fileIsLoaded = useSelector((state: AppState) => state.file.type);
+  const { isError, message } = error;
 
   return (
     <Container maxWidth="sm">
